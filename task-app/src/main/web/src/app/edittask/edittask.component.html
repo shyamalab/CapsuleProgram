@@ -1,0 +1,93 @@
+<div class="row my-3 p-3 bg-white rounded box-shadow">
+  <div class="col-xs-12 col-sm-2 col-md-2"></div>
+  <div class="col-xs-12 col-sm-8 col-md-8">
+    <form method="post" (ngSubmit)="updateTask()" novalidate>
+      <div class="form-group row">
+        <label for="task" class="col-sm-3 col-form-label">{{'Task Name' | translate}}</label>
+        <div class="col-sm-8">
+          <input type="text" class="form-control" id="task" maxlength="50" required name="task" #taskName="ngModel"
+            [(ngModel)]="Task.task" placeholder="Enter the Task Name">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="priority" class="col-sm-3 col-form-label">{{'Priority' | translate}}</label>
+        <div class="col-sm-7">
+          <div class="pt-2">
+            <input type="range" min="1" max="30" name="priority" [(ngModel)]="Task.priority" class="slider"
+              id="priority">
+          </div>
+        </div>
+        <div class="col-sm-1">
+          <div class="pt-2">
+            {{Task.priority}}
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="parTask" class="col-sm-3 col-form-label">{{'Parent Task' | translate}}</label>
+        <div class="col-sm-8">
+          <input type="text" class="form-control" id="parTask" maxlength="50" required name="parTask" #partask="ngModel"
+            [(ngModel)]="Task.parent_Task.parTask" placeholder="Enter the Parent Task Name">
+          <select class="form-control" id="parTask" maxlength="50" required name="parTask" #partask="ngModel"
+            [(ngModel)]="Task.parent_Task.parTask">
+            <option *ngFor="let item of alltaskList" [value]="item.task">{{item.task}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="start_Date" id="startendDate"
+          class="col-sm-3 col-form-label">{{'Start & End Date' | translate}}</label>&nbsp;&nbsp;&nbsp;
+        <form class="form-inline">
+          <div class="form-group hidden">
+            <div class="input-group ">
+              <input name="datepicker" class="form-control" ngbDatepicker #datepicker="ngbDatepicker"
+                [autoClose]="'outside'" (dateSelect)="onDateSelection($event)" [displayMonths]="2" [dayTemplate]="t"
+                outsideDays="hidden" [startDate]="fromDate">
+              <ng-template #t let-date let-focused="focused">
+                <span class="custom-day" [class.focused]="focused" [class.range]="isRange(date)"
+                  [class.faded]="isHovered(date) || isInside(date)" (mouseenter)="hoveredDate = date"
+                  (mouseleave)="hoveredDate = null">
+                  {{ date.day }}
+                </span>
+              </ng-template>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="input-group">
+              <input #dpFromDate class="form-control" placeholder="{{'dateplaceholder' | translate}}" name="dpFromDate"
+                [value]="formatter.format(fromDate)" (input)="fromDate = validateInput(fromDate, dpFromDate.value)">
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary calendar" (click)="datepicker.toggle()" type="button"></button>
+              </div>
+            </div>
+          </div>
+          <div class="form-group ml-2">
+            <div class="input-group">
+              <input #dpToDate class="form-control" placeholder="{{'dateplaceholder' | translate}}" name="dpToDate"
+                [value]="formatter.format(toDate)" (input)="toDate = validateInput(toDate, dpToDate.value)">
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary calendar" (click)="datepicker.toggle()" type="button"></button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+        {{'Start Date' | translate}}: <span class="text-primary">{{convertDateJsonToString(fromDate)}}</span><br/>
+      {{'End Date' | translate}}: <span class="text-primary">{{convertDateJsonToString(toDate)}}</span>
+      <br>
+      <br>
+      <div class="form-group row">
+        <div class="col-sm-4 col-form-label"></div>
+        <div class="col-sm-8 row">
+          <div class="input-group">
+            <div class="row">
+              <button type="submit" class="btn btn-success mx-3">{{'Update' | translate}}</button>
+              <button type="button" class="btn btn-info mx-5" routerLink="/viewtask">&nbsp; &nbsp;
+                {{'Cancel' | translate}} &nbsp; &nbsp; </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

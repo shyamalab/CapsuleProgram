@@ -1,0 +1,100 @@
+<body ng-controller="MainCtrl">
+    <form #viewTaskForm="ngForm" novalidate>
+        <div class="row my-3 p-3 bg-white rounded box-shadow">
+            <br /><br />
+            <div class="row col-xs-12 col-sm-12 col-md-12">
+                <div class="h6 mx-3">{{'SearchField' | translate}}</div>
+            </div>
+            <hr />
+            <br /><br />
+            <div class="row col-xs-12 col-sm-12 col-md-12">
+                <div class="form-group col-xs-12 col-sm-6 col-md-6">
+                    <label for="task">{{'Task Name' | translate}}</label>
+                    <input type="text" class="form-control" id="task" maxlength="50" name="task" #task="ngModel"
+                        [(ngModel)]="task.task">
+                </div>
+                <div class="form-group col-xs-12 col-sm-6 col-md-6">
+                    <label for="parentTaskName">{{'Parent Task Name' | translate}}</label>
+
+                    <input name="parentTaskName" type="text" class="form-control" id="parentTaskName" maxlength="50"
+                        name="parentTaskName" #parentTaskName="ngModel" [(ngModel)]="task.parentTaskName" />
+                    <select class="ddloption" class="form-control" id="parentTaskName" maxlength="50"
+                        name="parentTaskName" #parentTaskName="ngModel" [(ngModel)]="task.parentTaskName">
+                        <option *ngFor="let item of alltaskList" [value]="item.task">{{item.task}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row col-xs-12 col-sm-12 col-md-12">
+                <div class="form-group col-xs-12 col-sm-3 col-md-3">
+                    <label for="priorityFrom">{{'Priority From' | translate}}</label>
+                    <input type="text" class="form-control" id="priorityFrom" maxlength="2" name="priorityFrom"
+                        #priorityFrom="ngModel" [(ngModel)]="task.priorityFrom">
+                </div>
+                <div class="form-group col-xs-12 col-sm-3 col-md-3">
+                    <label for="priorityTo">{{'Priority To' | translate}}</label>
+                    <input type="text" class="form-control" id="priorityTo" maxlength="2" name="priorityTo"
+                        #priorityTo="ngModel" [(ngModel)]="task.priorityTo">
+                </div>
+                <div class="form-group col-xs-12 col-sm-3 col-md-3">
+                    <label for="start_Date">{{'Start Date' | translate}}</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="{{'dateplaceholder' | translate}}"
+                            id="start_Date" [readonly]="true" name="start_Date" [(ngModel)]="task.start_Date"
+                            ngbDatepicker #start_Date="ngbDatepicker"
+                            (dateSelect)="onDateSelectPicker($event,'start')" />
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary fa fa-calendar" (click)="start_Date.toggle()"
+                                type="button"></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-xs-12 col-sm-3 col-md-3">
+                    <label for="end_Date">{{'End Date' | translate}}</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="{{'dateplaceholder' | translate}}"
+                            id="end_Date" [readonly]="true" name="end_Date" [(ngModel)]="task.end_Date" ngbDatepicker
+                            #end_Date="ngbDatepicker" (dateSelect)="onDateSelectPicker($event,'end')" />
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary fa fa-calendar" (click)="end_Date.toggle()"
+                                type="button"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row col-xs-12 col-sm-12 col-md-12">
+                <table class="table table-bordered mx-3 my-4">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">{{'Task' | translate}}</th>
+                            <th scope="col">{{'Parent Task' | translate}} </th>
+                            <th scope="col">{{'Priority' | translate}}</th>
+                            <th scope="col">{{'Start Date' | translate}}</th>
+                            <th scope="col">{{'End Date' | translate}}</th>
+                            <th scope="col">{{'Edit' | translate}}</th>
+                            <th scope="col">{{'End' | translate}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of alltaskList | taskSearchPipe : task">
+                            <td>{{item.task}}</td>
+                            <td>{{getParentTaskName(item)}}</td>
+                            <td>{{item.priority}}</td>
+                            <td>{{item.start_Date}}</td>
+                            <td>{{item.end_Date}}</td>
+                            <td><button type="button" class="btn btn-info"
+                                    [disabled]="(item.endTask == '1')? true:false"
+                                    routerLink="/edittask/{{item.task_ID}}">{{'Edit Task' | translate}}</button></td>
+                            <td><button type="button" [disabled]="(item.endTask == '1')? true:false"
+                                    class="btn btn-secondary mx-2"
+                                    (click)=endTask(item)>{{'End Task' | translate}}</button>
+                            </td>
+
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </form>
+
+</body>
